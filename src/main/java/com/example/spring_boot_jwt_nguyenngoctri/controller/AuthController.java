@@ -9,10 +9,9 @@ import com.example.spring_boot_jwt_nguyenngoctri.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
@@ -54,6 +53,29 @@ public class AuthController {
         tokenService.createToken(token);
 
         return ResponseEntity.ok(token.getToken());
+    }
+
+    @GetMapping("/hello")
+    @PreAuthorize("hasAnyAuthority('USER_READ')")
+    public ResponseEntity hello(){
+        return ResponseEntity.ok("hello");
+    }
+
+    @PutMapping("/user")
+    @PreAuthorize("hasAnyAuthority('USER_UPDATE')")
+    public ResponseEntity update(){
+        return ResponseEntity.ok("This is update");
+    }
+    @PostMapping("/user")
+    @PreAuthorize("hasAnyAuthority('USER_CREATE')")
+    public ResponseEntity create(){
+        return ResponseEntity.ok("This is create");
+    }
+
+    @DeleteMapping("/user")
+    @PreAuthorize("hasAnyAuthority('USER_DELETE')")
+    public ResponseEntity delete(){
+        return ResponseEntity.ok("This is delete");
     }
 
 }
